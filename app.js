@@ -9,6 +9,7 @@ const rateLimit = require('express-rate-limit');
 const config = require('./config/config');
 const mountRoute = require('./routes/routes');
 const { env_mode } = require('./enums/common.enum');
+const errorHandler = require('./middlewares/error.middleware');
 
 const app = express();
 
@@ -35,6 +36,8 @@ app.use(cors()); // enable cors
 // mount routers
 mountRoute(app);
 
+// Handle error
+app.use(errorHandler);
 
 module.exports = app;
 

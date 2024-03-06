@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const winston = require('../middlewares/winston');
+const winston = require('../middlewares/winston.middleware');
 const config = require('./config');
 
 const sequelize = new Sequelize(
