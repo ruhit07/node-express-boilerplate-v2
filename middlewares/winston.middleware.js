@@ -2,7 +2,7 @@ const winston = require('winston');
 require('winston-daily-rotate-file');
 
 const transport = new (winston.transports.DailyRotateFile)({
-  filename: `${__dirname}/../../logs/app-%DATE%.log`,
+  filename: `${__dirname}/../logs/app-%DATE%.log`,
   datePattern: 'DD-MM-YYYY',
   zippedArchive: true,
   maxSize: '20m',
@@ -18,7 +18,7 @@ const timezoned = () => new Date().toLocaleString('en-US', {
 const options = {
   file: {
     level: 'info',
-    filename: `${__dirname}/../../logs/app.log`,
+    filename: `${__dirname}/../logs/app.log`,
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
@@ -27,7 +27,7 @@ const options = {
   },
   fileError: {
     level: 'error',
-    filename: `${__dirname}/../../logs/errors.log`,
+    filename: `${__dirname}/../logs/errors.log`,
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
@@ -35,10 +35,10 @@ const options = {
     colorize: false
   },
   exception: {
-    filename: `${__dirname}/../../logs/exceptions.log`,
+    filename: `${__dirname}/../logs/exceptions.log`,
   },
   rejection: {
-    filename: `${__dirname}/../../logs/rejections.log`,
+    filename: `${__dirname}/../logs/rejections.log`,
   },
   console: {
     level: 'debug',
