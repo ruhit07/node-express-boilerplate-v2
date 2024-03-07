@@ -3,8 +3,14 @@ const env_mode = {
   DEVELOPMENT: 'development',
 }
 
+const user_role = {
+  ADMIN: 'Admin',
+  USER: 'User',
+}
+
 module.exports = {
   env_mode,
+  user_role
 };
 
 
