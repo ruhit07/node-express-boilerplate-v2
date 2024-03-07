@@ -1,6 +1,6 @@
 
 const Joi = require('joi');
-const ErrorResponse = require('../../utils/errorResponse');
+const ErrorResponse = require('../utils/error-response.utils');
 const moment = require('moment');
 const { user_role } = require('../enums/common.enum');
 
