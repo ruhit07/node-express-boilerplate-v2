@@ -1,10 +1,8 @@
 const asyncHandler = require("../middlewares/async.middleware");
 const ErrorResponse = require("../utils/error-response.utils");
-const winston = require("../middlewares/winston.middleware");
 
 const { User } = require("../models");
 const { createUserSchema, updateUserSchema } = require("../validation/user.validation");
-const { sequelize } = require("../config/db");
 
 // @desc      Get List of all users
 // @route     GET /api/v1/users
@@ -44,7 +42,6 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 exports.addUser = asyncHandler(async (req, res, next) => {
 
   const reqBody = await createUserSchema(req.body);
-  winston.info(`User ${req.user?.username} creating User: ${JSON.stringify(reqBody)}`.cyan);
 
   const userExists = await User.findOne({ where: { username: reqBody.username } });
   if (userExists) {
@@ -71,7 +68,6 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
   }
 
   const reqBody = await updateUserSchema(req.body);
-  winston.info(`User ${req.user?.username} updating User: ${JSON.stringify(reqBody)}`.cyan);
 
   if (reqBody.username) {
     const existUser = await User.findOne({ where: { username: reqBody.username } })
