@@ -18,7 +18,7 @@ const errorHandler = async (err, req, res, next) => {
   // Log to console for dev
   console.log(`${err}`.red);
 
-  if (req.originalUrl === '/api/v1/auth/login') {
+  if (req.originalUrl === '/api/v2/auth/login') {
     Object.entries(req.cookies).forEach(([key, value]) => res.clearCookie(key));
   }
 

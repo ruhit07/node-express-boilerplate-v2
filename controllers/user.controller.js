@@ -5,7 +5,7 @@ const { User } = require("../models");
 const { createUserSchema, updateUserSchema } = require("../validation/user.validation");
 
 // @desc      Get List of all users
-// @route     GET /api/v1/users
+// @route     GET /api/v2/users
 // @access    Private/Admin
 exports.getUsers = asyncHandler(async (req, res, next) => {
 
@@ -20,7 +20,7 @@ exports.getUsers = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Get single user
-// @route     GET /api/v1/users/:id
+// @route     GET /api/v2/users/:id
 // @access    Private/Admin
 exports.getUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByPk(req.params.id);
@@ -37,7 +37,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Create User
-// @route     POST /api/v1/users
+// @route     POST /api/v2/users
 // @access    Private/Admin
 exports.addUser = asyncHandler(async (req, res, next) => {
 
@@ -58,7 +58,7 @@ exports.addUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Update User
-// @route     PUT /api/v1/users/:id
+// @route     PUT /api/v2/users/:id
 // @access    Private/Admin
 exports.updateUser = asyncHandler(async (req, res, next) => {
 
@@ -86,7 +86,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Delete User
-// @route     DELETE /api/v1/users/:id
+// @route     DELETE /api/v2/users/:id
 // @access    Private/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
 
