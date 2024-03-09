@@ -1,4 +1,3 @@
-// const ErrorResponse = require('../utils/errorResponse');
 const ErrorResponse = require('../utils/error-response.utils');
 const winston = require('./winston.middleware')
 
