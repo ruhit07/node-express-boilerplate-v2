@@ -1,10 +1,10 @@
 const { User } = require('../models');
 const config = require('../config/config');
-const asyncHandler = require('../middlewares/async.middleware');
 const { env_mode } = require('../enums/common.enum');
+const asyncHandler = require('../middlewares/async.middleware');
 
 const ErrorResponse = require('../utils/error-response.utils');
-const { registerUserSchema } = require('../validation/auth.validation');
+const { registerUserSchema, loginUserSchema } = require('../validation/auth.validation');
 
 
 // @desc      Register user
@@ -28,6 +28,37 @@ exports.register = asyncHandler(async (req, res, next) => {
   // Create token and back response
   delete user.dataValues?.password
   sendTokenResponse(user, 201, 'Registration successfull', res);
+});
+
+
+// @desc      Login user
+// @route     POST /api/v1/auth/login
+// @access    Public
+exports.login = asyncHandler(async (req, res, next) => {
+
+  const reqBody = await loginUserSchema(req.body);
+
+  const { username, password } = reqBody;
+
+  // Check for user
+  let user = await User.findOne({ where: { username } });
+  if (!user) {
+    return next(new ErrorResponse('Invalid credentials', 401));
+  };
+
+  // Check if password matches
+  const isMatch = await user.matchPassword(password);
+  if (!isMatch) {
+    return next(new ErrorResponse('Invalid credentials', 401));
+  }
+
+  if (!user.is_active) {
+    return next(new ErrorResponse('User blocked', 401));
+  }
+
+  // Create token and back response
+  delete user.dataValues?.password
+  sendTokenResponse(user, 200, 'Login successfull', res);
 });
 
 

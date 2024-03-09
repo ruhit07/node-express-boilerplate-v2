@@ -24,6 +24,23 @@ const registerUserSchema = (reqBody) => {
   })
 };
 
+
+const loginUserSchema = (reqBody) => {
+  const data = reqBody;
+
+  let dataSchema = {
+    username: Joi.string().required(),
+    password: Joi.string().required()
+  };
+
+  return new Promise((resolve, reject) => {
+    const { value, error } = Joi.object(dataSchema).validate(data, { abortEarly: false });
+    if (error) reject(new ErrorResponse(error, 400, { name: "JoiValidationError", error }));
+    resolve(value);
+  })
+};
+
 module.exports = {
-  registerUserSchema
+  registerUserSchema,
+  loginUserSchema
 }
