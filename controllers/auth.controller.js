@@ -8,7 +8,7 @@ const { registerUserSchema, loginUserSchema } = require('../validation/auth.vali
 
 
 // @desc      Register user
-// @route     POST /api/v1/auth/register
+// @route     POST /api/v2/auth/register
 // @access    Public
 exports.register = asyncHandler(async (req, res, next) => {
 
@@ -32,7 +32,7 @@ exports.register = asyncHandler(async (req, res, next) => {
 
 
 // @desc      Login user
-// @route     POST /api/v1/auth/login
+// @route     POST /api/v2/auth/login
 // @access    Public
 exports.login = asyncHandler(async (req, res, next) => {
 
@@ -59,6 +59,68 @@ exports.login = asyncHandler(async (req, res, next) => {
   // Create token and back response
   delete user.dataValues?.password
   sendTokenResponse(user, 200, 'Login successfull', res);
+});
+
+
+// @desc      Logout user 
+// @route     DELETE /api/v2/auth/logout
+// @access    Private
+exports.logout = asyncHandler(async (req, res, next) => {
+
+  Object.entries(req.cookies).forEach(([key, value]) => res.clearCookie(key));
+
+  res.status(200).json({
+    success: true,
+    message: "Logout successfully",
+    data: {}
+  });
+});
+
+
+// @desc      Get current logged in user
+// @route     POST /api/v2/auth/me
+// @access    Private
+exports.getMe = asyncHandler(async (req, res, next) => {
+
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
+  const user = await User.findByPk(req.user.id);
+  if (!user) {
+    return next(new ErrorResponse(`No User with the id of ${req.user.id}`, 404));
+  }
+
+
+  res.status(200).json({
+    success: true,
+    message: "Current logged in user",
+    data: user
+  });
+});
+
+
+// @desc      Delete current user
+// @route     DELETE /api/v2/auth/me
+// @access    Private
+exports.deleteMe = asyncHandler(async (req, res, next) => {
+
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
+  const user = await User.findByPk(req.user.id);
+  if (!user) {
+    return next(new ErrorResponse(`No User with the id of ${req.user.id}`, 404));
+  }
+
+  await user.destroy();
+
+  res.status(200).json({
+    success: true,
+    message: "Delete current user",
+    data: user
+  });
 });
 
 

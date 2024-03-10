@@ -1,15 +1,23 @@
 const express = require('express');
 const router = express.Router();
 
+const { protect } = require('../middlewares/auth.middleware');
 const { jwtConfig } = require('../middlewares/jwt-config.middleware');
  
 const {
-  register 
+  register, 
+  login,
+  logout, 
+  getMe,
+  deleteMe
 } = require('../controllers/auth.controller');
 
 router.use(jwtConfig);
 
 router.post('/register', register);
-
+router.post('/login', login);
+router.delete('/logout', protect, logout);
+router.get('/me', protect, getMe);
+router.delete('/me', protect, deleteMe);
 
 module.exports = router;
