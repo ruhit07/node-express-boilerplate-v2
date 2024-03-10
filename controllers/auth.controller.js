@@ -124,6 +124,36 @@ exports.deleteMe = asyncHandler(async (req, res, next) => {
 });
 
 
+// @desc      Update user details
+// @route     PUT /api/v2/auth/updatedetails
+// @access    Private
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
+  const reqBody = await updateUserDetailsSchema(req.body);
+
+  if (reqBody.username) {
+    const existUser = await User.findOne({ where: { username: reqBody.username } })
+    if (existUser && existUser.id !== req.user.id) {
+      return next(new ErrorResponse(`Username ${reqBody.username} address already in use!`, 409));
+    }
+  }
+
+  const [rowsUpdated, [user]] = await User.update(reqBody, {
+    where: { id: req.user.id },
+    returning: true
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "User details updated successfully",
+    data: user
+  });
+});
+
+
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, message, res) => {
 

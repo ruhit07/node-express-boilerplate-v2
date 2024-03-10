@@ -9,7 +9,8 @@ const {
   login,
   logout, 
   getMe,
-  deleteMe
+  deleteMe,
+  updateDetails
 } = require('../controllers/auth.controller');
 
 router.use(jwtConfig);
@@ -19,5 +20,6 @@ router.post('/login', login);
 router.delete('/logout', protect, logout);
 router.get('/me', protect, getMe);
 router.delete('/me', protect, deleteMe);
+router.put('/updatedetails', protect, updateDetails);
 
 module.exports = router;

@@ -40,7 +40,28 @@ const loginUserSchema = (reqBody) => {
   })
 };
 
+
+const updateUserDetailsSchema = (reqBody) => {
+  const data = reqBody;
+
+  const dataSchema = {
+    name: Joi.string(),
+    username: Joi.string(),
+    email: Joi.string().empty(["", null]).default(null),
+    phone_no: Joi.string().empty(["", null]).default(null),
+    updated_at: Joi.date().default(moment()),
+  };
+
+  return new Promise((resolve, reject) => {
+    const { value, error } = Joi.object(dataSchema).validate(data, { abortEarly: false });
+    if (error) reject(new ErrorResponse(error, 400, { name: "JoiValidationError", error }));
+    resolve(value)
+  })
+};
+
+
 module.exports = {
   registerUserSchema,
-  loginUserSchema
+  loginUserSchema,
+  updateUserDetailsSchema
 }
