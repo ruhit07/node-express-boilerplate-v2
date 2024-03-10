@@ -4,7 +4,7 @@ const { env_mode } = require('../enums/common.enum');
 const asyncHandler = require('../middlewares/async.middleware');
 
 const ErrorResponse = require('../utils/error-response.utils');
-const { registerUserSchema, loginUserSchema } = require('../validation/auth.validation');
+const { registerUserSchema, loginUserSchema, updatePasswordSchema } = require('../validation/auth.validation');
 
 
 // @desc      Register user
@@ -151,6 +151,41 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
     message: "User details updated successfully",
     data: user
   });
+});
+
+
+
+// @desc      Update password
+// @route     PUT /api/v1/auth/updatepassword
+// @access    Private
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  if (!req.user) {
+    return next(new ErrorResponse('Authentication Failed', 401));
+  }
+
+  const reqBody = await updatePasswordSchema(req.body);
+
+  const { currentPassword, newPassword } = reqBody;
+
+  const user = await User.findByPk(req.user.id, { attributes: { include: 'password' } });
+  if (!user) {
+    return next(new ErrorResponse(`No User with the id of ${req.user.id}`, 404));
+  };
+
+  // Check current password
+  if (!(await user.matchPassword(currentPassword))) {
+    return next(new ErrorResponse('Password is incorrect', 401));
+  };
+
+  user.password = newPassword;
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Password updated successfully",
+    data: {}
+  });
+
 });
 
 

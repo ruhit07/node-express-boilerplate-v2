@@ -60,8 +60,24 @@ const updateUserDetailsSchema = (reqBody) => {
 };
 
 
+const updatePasswordSchema = (reqBody) => {
+  const data = reqBody;
+
+  let dataSchema = {
+    currentPassword: Joi.string().required(),
+    newPassword: Joi.string().min(6).required(),
+  };
+
+  return new Promise((resolve, reject) => {
+    const { value, error } = Joi.object(dataSchema).validate(data, { abortEarly: false });
+    if (error) reject(new ErrorResponse(error, 400, { name: "JoiValidationError", error }));
+    resolve(value);
+  })
+};
+
 module.exports = {
   registerUserSchema,
   loginUserSchema,
-  updateUserDetailsSchema
+  updateUserDetailsSchema,
+  updatePasswordSchema
 }

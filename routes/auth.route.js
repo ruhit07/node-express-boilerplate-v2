@@ -10,7 +10,8 @@ const {
   logout, 
   getMe,
   deleteMe,
-  updateDetails
+  updateDetails,
+  updatePassword
 } = require('../controllers/auth.controller');
 
 router.use(jwtConfig);
@@ -21,5 +22,6 @@ router.delete('/logout', protect, logout);
 router.get('/me', protect, getMe);
 router.delete('/me', protect, deleteMe);
 router.put('/updatedetails', protect, updateDetails);
+router.put('/updatepassword', protect, updatePassword);
 
 module.exports = router;
